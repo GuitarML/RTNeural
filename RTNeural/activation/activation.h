@@ -38,8 +38,6 @@ private:
 } // namespace RTNeural
 
 
-
-#else
 #include "../common.h"
 #include <cmath>
 
