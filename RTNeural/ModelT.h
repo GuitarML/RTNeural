@@ -106,82 +106,6 @@ namespace modelt_detail
         }
     }
 
-    template <typename T, int in_size, int out_size, int kernel_size, int dilation_rate, bool dynamic_state>
-    void loadLayer(Conv1DT<T, in_size, out_size, kernel_size, dilation_rate, dynamic_state>& conv, int& json_stream_idx, const nlohmann::json& l,
-        const std::string& type, int layerDims, bool debug)
-    {
-        using namespace json_parser;
-
-        debug_print("Layer: " + type, debug);
-        debug_print("  Dims: " + std::to_string(layerDims), debug);
-        const auto& weights = l["weights"];
-        const auto kernel = l["kernel_size"].back().get<int>();
-        const auto dilation = l["dilation"].back().get<int>();
-
-        if(checkConv1D<T>(conv, type, layerDims, kernel, dilation, debug))
-            loadConv1D<T>(conv, kernel, dilation, weights);
-
-        if(!l.contains("activation"))
-        {
-            json_stream_idx++;
-        }
-        else
-        {
-            const auto activationType = l["activation"].get<std::string>();
-            if(activationType.empty())
-                json_stream_idx++;
-        }
-    }
-    template <typename T, int num_filters_in_t, int num_filters_out_t, int num_features_in_t, int kernel_size_time_t,
-        int kernel_size_feature_t, int dilation_rate_t, int stride_t, bool valid_pad_t>
-    void loadLayer(Conv2DT<T, num_filters_in_t, num_filters_out_t, num_features_in_t, kernel_size_time_t,
-                       kernel_size_feature_t, dilation_rate_t, stride_t, valid_pad_t>& conv,
-        int& json_stream_idx, const nlohmann::json& l,
-        const std::string& type, int layerDims, bool debug)
-    {
-        using namespace json_parser;
-
-        debug_print("Layer: " + type, debug);
-        debug_print("  Dims: " + std::to_string(layerDims), debug);
-        const auto& weights = l["weights"];
-        const auto kernel_time = l["kernel_size_time"].back().get<int>();
-        const auto kernel_feature = l["kernel_size_feature"].back().get<int>();
-
-        const auto dilation = l["dilation"].back().get<int>();
-        const auto strides = l["strides"].back().get<int>();
-        const bool valid_pad = l["padding"].get<std::string>() == "valid";
-
-        if(checkConv2D<T>(conv, type, layerDims, kernel_time, kernel_feature, dilation, strides, valid_pad, debug))
-            loadConv2D<T>(conv, weights);
-
-        if(!l.contains("activation"))
-        {
-            json_stream_idx++;
-        }
-        else
-        {
-            const auto activationType = l["activation"].get<std::string>();
-            if(activationType.empty())
-                json_stream_idx++;
-        }
-    }
-
-    template <typename T, int in_size, int out_size, SampleRateCorrectionMode mode>
-    void loadLayer(GRULayerT<T, in_size, out_size, mode>& gru, int& json_stream_idx, const nlohmann::json& l,
-        const std::string& type, int layerDims, bool debug)
-    {
-        using namespace json_parser;
-
-        debug_print("Layer: " + type, debug);
-        debug_print("  Dims: " + std::to_string(layerDims), debug);
-        const auto& weights = l["weights"];
-
-        if(checkGRU<T>(gru, type, layerDims, debug))
-            loadGRU<T>(gru, weights);
-
-        json_stream_idx++;
-    }
-
     template <typename T, int in_size, int out_size, SampleRateCorrectionMode mode>
     void loadLayer(LSTMLayerT<T, in_size, out_size, mode>& lstm, int& json_stream_idx, const nlohmann::json& l,
         const std::string& type, int layerDims, bool debug)
@@ -198,59 +122,7 @@ namespace modelt_detail
         json_stream_idx++;
     }
 
-    template <typename T, int size>
-    void loadLayer(PReLUActivationT<T, size>& prelu, int& json_stream_idx, const nlohmann::json& l,
-        const std::string& type, int layerDims, bool debug)
-    {
-        using namespace json_parser;
-
-        debug_print("Layer: " + type, debug);
-        debug_print("  Dims: " + std::to_string(layerDims), debug);
-        const auto& weights = l["weights"];
-
-        if(checkPReLU<T>(prelu, type, layerDims, debug))
-            loadPReLU<T>(prelu, weights);
-
-        json_stream_idx++;
-    }
-
-    template <typename T, int size, bool affine>
-    void loadLayer(BatchNorm1DT<T, size, affine>& batch_norm, int& json_stream_idx, const nlohmann::json& l,
-        const std::string& type, int layerDims, bool debug)
-    {
-        using namespace json_parser;
-
-        debug_print("Layer: " + type, debug);
-        debug_print("  Dims: " + std::to_string(layerDims), debug);
-        const auto& weights = l["weights"];
-
-        if(checkBatchNorm<T>(batch_norm, type, layerDims, weights, debug))
-        {
-            loadBatchNorm<T>(batch_norm, weights);
-            batch_norm.setEpsilon(l["epsilon"].get<float>());
-        }
-
-        json_stream_idx++;
-    }
-
-    template <typename T, int num_filters, int num_features, bool affine>
-    void loadLayer(BatchNorm2DT<T, num_filters, num_features, affine>& batch_norm, int& json_stream_idx, const nlohmann::json& l,
-        const std::string& type, int layerDims, bool debug)
-    {
-        using namespace json_parser;
-
-        debug_print("Layer: " + type, debug);
-        debug_print("  Dims: " + std::to_string(layerDims), debug);
-        const auto& weights = l["weights"];
-
-        if(checkBatchNorm2D<T>(batch_norm, type, layerDims, weights, debug))
-        {
-            loadBatchNorm<T>(batch_norm, weights);
-            batch_norm.setEpsilon(l["epsilon"].get<float>());
-        }
-
-        json_stream_idx++;
-    }
+ 
 
     template <typename T, int in_size, typename... Layers>
     void parseJson(const nlohmann::json& parent, std::tuple<Layers...>& layers, const bool debug = false, std::initializer_list<std::string> custom_layers = {})

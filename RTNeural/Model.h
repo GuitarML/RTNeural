@@ -6,17 +6,7 @@
 
 #include "Layer.h"
 #include "activation/activation.h"
-#include "batchnorm/batchnorm.h"
-#include "batchnorm/batchnorm.tpp"
-#include "batchnorm/batchnorm2d.h"
-#include "batchnorm/batchnorm2d.tpp"
-#include "conv1d/conv1d.h"
-#include "conv1d/conv1d.tpp"
-#include "conv2d/conv2d.h"
-#include "conv2d/conv2d.tpp"
 #include "dense/dense.h"
-#include "gru/gru.h"
-#include "gru/gru.tpp"
 #include "lstm/lstm.h"
 #include "lstm/lstm.tpp"
 

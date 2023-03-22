@@ -5,13 +5,6 @@
 #include <numeric>
 #include <vector>
 
-#if RTNEURAL_USE_EIGEN
-#include "dense_eigen.h"
-#elif RTNEURAL_USE_XSIMD
-#include "dense_xsimd.h"
-#elif RTNEURAL_USE_ACCELERATE
-#include "dense_accelerate.h"
-#else
 #include "../Layer.h"
 
 namespace RTNeural
@@ -250,6 +243,5 @@ private:
 
 } // namespace RTNeural
 
-#endif // RTNEURAL_USE_STL
 
 #endif // DENSE_H_INCLUDED

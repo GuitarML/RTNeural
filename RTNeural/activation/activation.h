@@ -37,14 +37,7 @@ private:
 
 } // namespace RTNeural
 
-#if RTNEURAL_USE_EIGEN
-#include "activation_eigen.h"
 
-#elif RTNEURAL_USE_XSIMD
-#include "activation_xsimd.h"
-
-#elif RTNEURAL_USE_ACCELERATE
-#include "activation_accelerate.h"
 
 #else
 #include "../common.h"
@@ -471,6 +464,5 @@ public:
 };
 } // namespace RTNeural
 
-#endif // RTNEURAL_USE_EIGEN
 
 #endif // ACTIVATION_H_INCLUDED

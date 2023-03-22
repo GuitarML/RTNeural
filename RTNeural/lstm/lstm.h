@@ -1,16 +1,7 @@
 #ifndef LSTM_H_INCLUDED
 #define LSTM_H_INCLUDED
 
-#if RTNEURAL_USE_EIGEN
-#include "lstm_eigen.h"
-#include "lstm_eigen.tpp"
-#elif RTNEURAL_USE_XSIMD
-#include "lstm_xsimd.h"
-#include "lstm_xsimd.tpp"
-#elif RTNEURAL_USE_ACCELERATE
-#include "lstm_accelerate.h"
-#include "lstm_accelerate.tpp"
-#else
+
 #include "../Layer.h"
 #include "../common.h"
 #include <vector>
@@ -349,4 +340,4 @@ private:
 
 #endif
 
-#endif // LSTM_H_INCLUDED
+//#endif // LSTM_H_INCLUDED
